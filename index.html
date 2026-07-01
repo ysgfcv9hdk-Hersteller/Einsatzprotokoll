@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WW Einsatztagebuch</title>
+<style>
+:root{
+  --blue:#005ea8;
+  --blue2:#1976d2;
+  --dark:#1f2937;
+  --gray:#f3f6f9;
+  --line:#d8dee6;
+  --yellow:#ffc400;
+  --yellow2:#ffd84d;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:#eef2f6;
+  color:#111827;
+}
+header{
+  background:var(--blue);
+  color:white;
+  padding:18px 22px;
+}
+header h1{
+  margin:0;
+  font-size:24px;
+}
+main{
+  max-width:1180px;
+  margin:18px auto;
+  padding:0 14px 30px;
+}
+.card{
+  background:white;
+  border-radius:14px;
+  padding:18px;
+  margin-bottom:16px;
+  box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+h2,h3{
+  margin:0 0 14px;
+}
+label{
+  display:block;
+  font-weight:700;
+  margin:12px 0 6px;
+}
+input, select, textarea{
+  width:100%;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  font-size:16px;
+  background:white;
+}
+textarea{
+  min-height:95px;
+  resize:vertical;
+}
+.grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+@media(max-width:760px){
+  .grid2{grid-template-columns:1fr}
+}
+.crew-table{
+  width:100%;
+  border-collapse:collapse;
+}
+.crew-table th,.crew-table td{
+  padding:9px 6px;
+  border-bottom:1px solid var(--line);
+  text-align:left;
+}
+.crew-table th:last-child,.crew-table td:last-child{
+  text-align:right;
+  width:120px;
+}
+.crew-table input{
+  max-width:95px;
+  text-align:center;
+}
+.status-grid,.event-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:12px;
+}
+.status-btn,.event-btn,.main-btn,.pdf-btn,.danger-btn{
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  transition:.14s ease;
+  box-shadow:0 3px 8px rgba(0,0,0,.14);
+}
+.status-btn{
+  background:var(--blue);
+  color:white;
+  min-height:86px;
+  padding:16px;
+  text-align:left;
+}
+.status-btn:hover{background:var(--blue2);transform:translateY(-2px)}
+.status-btn:active,.status-btn.active{background:#003f73;transform:scale(.98)}
+.status-btn .title{
+  font-size:18px;
+  font-weight:700;
+}
+.status-btn .sub{
+  font-size:18px;
+  font-weight:700;
+  margin-top:4px;
+  line-height:1.2;
+}
+.event-btn{
+  background:var(--yellow);
+  color:#111827;
+  min-height:76px;
+  padding:15px;
+  text-align:left;
+  font-size:16px;
+  font-weight:700;
+  line-height:1.2;
+}
+.event-btn:hover{background:var(--yellow2);transform:translateY(-2px)}
+.event-btn:active,.event-btn.active{background:#d9a400;transform:scale(.98)}
+.actions{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+.main-btn,.pdf-btn,.danger-btn{
+  min-width:220px;
+  padding:16px 22px;
+  color:white;
+  font-size:18px;
+  font-weight:700;
+}
+.main-btn{background:var(--blue)}
+.main-btn:hover{background:var(--blue2)}
+.pdf-btn{background:#2f2f2f}
+.pdf-btn:hover{background:#4a4a4a}
+.danger-btn{background:#9b1c1c}
+.danger-btn:hover{background:#b91c1c}
+.timeline-table{
+  width:100%;
+  border-collapse:collapse;
+  background:white;
+}
+.timeline-table th,.timeline-table td{
+  border-bottom:1px solid var(--line);
+  padding:9px;
+  text-align:left;
+  vertical-align:top;
+  font-size:14px;
+}
+.timeline-table th{
+  background:#f0f4f8;
+  font-weight:700;
+}
+.small{
+  color:#4b5563;
+  font-size:13px;
+  margin-top:8px;
+}
+@media print{
+  body{background:white}
+  header,.no-print{display:none!important}
+  main{max-width:none;margin:0;padding:0}
+  .card{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
+  button{display:none!important}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Wasserwacht Einsatztagebuch</h1>
+</header>
+
+<main>
+  <section class="card">
+    <h2>Einsatzdaten</h2>
+    <label for="einsatzmeldung">Einsatzmeldung</label>
+    <input id="einsatzmeldung" placeholder="z. B. Person im Wasser / Vermisstensuche">
+
+    <div class="grid2">
+      <div>
+        <label for="fahrzeug">Fahrzeug</label>
+        <select id="fahrzeug">
+          <option value="">Fahrzeug auswählen</option>
+          <option>MET 91/1</option>
+          <option>MET 90/1</option>
+          <option>MET 99/1</option>
+          <option>MET 99/2</option>
+          <option>MET 99/3</option>
+          <option>MET 99/4</option>
+        </select>
+      </div>
+      <div>
+        <label for="einsatzleiter">Zuständiger Einsatzleiter</label>
+        <select id="einsatzleiter">
+          <option value="">Bitte auswählen</option>
+          <option>7/1 Stephan Kröll</option>
+          <option>7/2 Thomas Rohrmoser</option>
+          <option>7/3 Andreas Otto</option>
+          <option>7/4 Sebastian Hagl</option>
+          <option>7/5 Christopher Helmbrecht</option>
+          <option>7/6 Phillip Gerstner</option>
+          <option>7/7 Fabian Gans</option>
+          <option>7/8 Simon Plötz</option>
+          <option>7/9 Herman Schattenkirchner</option>
+          <option>7/10 Ramona Brumm</option>
+        </select>
+      </div>
+    </div>
+
+    <label for="bemerkung">Bemerkung / Beitrag</label>
+    <textarea id="bemerkung" placeholder="Kurzen Eintrag schreiben..."></textarea>
+  </section>
+
+  <section class="card">
+    <h3>Mannschaft</h3>
+    <table class="crew-table">
+      <tr><th>Funktion</th><th>Anzahl</th></tr>
+      <tr><td>SEG-Leiter</td><td><input id="crew_seg" type="number" min="0"></td></tr>
+      <tr><td>Bootsführer</td><td><input id="crew_boot" type="number" min="0"></td></tr>
+      <tr><td>Wasserretter</td><td><input id="crew_wr" type="number" min="0"></td></tr>
+      <tr><td>Rettungsschwimmer</td><td><input id="crew_rs" type="number" min="0"></td></tr>
+      <tr><td>Fließwasserretter</td><td><input id="crew_fwr" type="number" min="0"></td></tr>
+      <tr><td>Taucher</td><td><input id="crew_taucher" type="number" min="0"></td></tr>
+      <tr><td>Sonstige</td><td><input id="crew_sonstige" type="number" min="0"></td></tr>
+    </table>
+  </section>
+
+  <section class="card">
+    <h3>Statusmeldungen</h3>
+    <div class="status-grid">
+      <button type="button" class="status-btn" onclick="recordButton('Status 1 – Einsatzbereit über Funk', this)">
+        <div class="title">Status 1</div><div class="sub">Einsatzbereit über Funk</div>
+      </button>
+      <button type="button" class="status-btn" onclick="recordButton('Status 2 – Einsatzbereit auf Wache', this)">
+        <div class="title">Status 2</div><div class="sub">Einsatzbereit auf Wache</div>
+      </button>
+      <button type="button" class="status-btn" onclick="recordButton('Status 3 – Einsatz übernommen / auf Anfahrt', this)">
+        <div class="title">Status 3</div><div class="sub">Einsatz übernommen / auf Anfahrt</div>
+      </button>
+      <button type="button" class="status-btn" onclick="recordButton('Status 4 – Am Einsatzort eingetroffen', this)">
+        <div class="title">Status 4</div><div class="sub">Am Einsatzort eingetroffen</div>
+      </button>
+      <button type="button" class="status-btn" onclick="recordButton('Status 6 – Nicht einsatzbereit', this)">
+        <div class="title">Status 6</div><div class="sub">Nicht einsatzbereit</div>
+      </button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h3>Ereignismeldungen</h3>
+    <div class="event-grid">
+      <button type="button" class="event-btn" onclick="recordButton('Einsatzauftrag erhalten', this)">Einsatzauftrag erhalten</button>
+      <button type="button" class="event-btn" onclick="recordButton('Suchmaßnahme begonnen', this)">Suchmaßnahme begonnen</button>
+      <button type="button" class="event-btn" onclick="recordButton('Lageänderung', this)">Lageänderung</button>
+      <button type="button" class="event-btn" onclick="recordButton('Transport', this)">Transport</button>
+      <button type="button" class="event-btn" onclick="recordButton('Übergabe Rettungsdienst', this)">Übergabe Rettungsdienst</button>
+      <button type="button" class="event-btn" onclick="recordButton('Versorgung', this)">Versorgung</button>
+      <button type="button" class="event-btn" onclick="recordButton('Person gerettet', this)">Person gerettet</button>
+      <button type="button" class="event-btn" onclick="recordButton('Person gefunden', this)">Person gefunden</button>
+      <button type="button" class="event-btn" onclick="recordButton('Einsatzabbruch', this)">Einsatzabbruch</button>
+      <button type="button" class="event-btn" onclick="recordButton('Einsatzende', this)">Einsatzende</button>
+    </div>
+  </section>
+
+  <section class="card no-print">
+    <div class="actions">
+      <button type="button" class="main-btn" onclick="createManualEntry()">Eintrag erstellen</button>
+      <button type="button" class="pdf-btn" onclick="window.print()">PDF speichern</button>
+      <button type="button" class="danger-btn" onclick="clearLog()">Auflistung leeren</button>
+    </div>
+    <div class="small">Hinweis: Die Einträge werden lokal im Browser gespeichert.</div>
+  </section>
+
+  <section class="card">
+    <h3>Auflistung / Einsatztagebuch</h3>
+    <table class="timeline-table">
+      <thead>
+        <tr>
+          <th>Datum</th>
+          <th>Uhrzeit</th>
+          <th>GPS</th>
+          <th>Eintrag</th>
+        </tr>
+      </thead>
+      <tbody id="timelineBody"></tbody>
+    </table>
+  </section>
+</main>
+
+<script>
+const STORAGE_KEY = "ww_einsatztagebuch_clean_entries";
+
+function getVal(id){
+  const el=document.getElementById(id);
+  return el ? el.value.trim() : "";
+}
+
+function getEntries(){
+  try{return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");}
+  catch(e){return [];}
+}
+
+function saveEntries(entries){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+}
+
+function getGps(callback){
+  if(!navigator.geolocation){
+    callback("GPS nicht unterstützt");
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(
+    pos => callback(pos.coords.latitude.toFixed(6) + ", " + pos.coords.longitude.toFixed(6)),
+    () => callback("Standort nicht verfügbar"),
+    {enableHighAccuracy:true, timeout:10000, maximumAge:0}
+  );
+}
+
+function addEntry(text, gps){
+  const now=new Date();
+  const eintrag={
+    datum: now.toLocaleDateString("de-DE"),
+    uhrzeit: now.toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit",second:"2-digit"}),
+    gps: gps || "",
+    text: text || "",
+    einsatzmeldung: getVal("einsatzmeldung"),
+    fahrzeug: getVal("fahrzeug"),
+    einsatzleiter: getVal("einsatzleiter")
+  };
+  const entries=getEntries();
+  entries.push(eintrag);
+  saveEntries(entries);
+  renderEntries();
+}
+
+function recordButton(text, btn){
+  if(btn){
+    btn.classList.add("active");
+    setTimeout(()=>btn.classList.remove("active"), 500);
+  }
+  getGps(gps => addEntry(text, gps));
+}
+
+function createManualEntry(){
+  const bemerkung=getVal("bemerkung");
+  const text=bemerkung || "Manueller Eintrag";
+  getGps(gps => {
+    addEntry(text, gps);
+    const b=document.getElementById("bemerkung");
+    if(b) b.value="";
+  });
+}
+
+function renderEntries(){
+  const tbody=document.getElementById("timelineBody");
+  if(!tbody) return;
+  const entries=getEntries();
+  tbody.innerHTML="";
+  entries.forEach(e=>{
+    const tr=document.createElement("tr");
+    const extra=[];
+    if(e.fahrzeug) extra.push("Fahrzeug: " + e.fahrzeug);
+    if(e.einsatzleiter) extra.push("EL: " + e.einsatzleiter);
+    if(e.einsatzmeldung) extra.push("Einsatzmeldung: " + e.einsatzmeldung);
+    tr.innerHTML =
+      "<td>"+escapeHtml(e.datum)+"</td>"+
+      "<td>"+escapeHtml(e.uhrzeit)+"</td>"+
+      "<td>"+gpsLinkHtml(e.gps)+"</td>"+
+      "<td><strong>"+escapeHtml(e.text)+"</strong>"+(extra.length ? "<br><small>"+escapeHtml(extra.join(" | "))+"</small>" : "")+"</td>";
+    tbody.appendChild(tr);
+  });
+}
+
+function clearLog(){
+  if(confirm("Auflistung wirklich leeren?")){
+    localStorage.removeItem(STORAGE_KEY);
+    renderEntries();
+  }
+}
+
+
+function gpsLinkHtml(gps){
+  const value = String(gps || "");
+  const match = value.match(/(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)/);
+  if(match){
+    const lat = match[1];
+    const lon = match[2];
+    const url = "https://www.google.com/maps?q=" + encodeURIComponent(lat + "," + lon);
+    return '<a href="' + url + '" target="_blank" rel="noopener">Google Maps</a><br><small>' + escapeHtml(lat + ", " + lon) + '</small>';
+  }
+  return escapeHtml(value);
+}
+
+function escapeHtml(s){
+  return String(s || "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  }[c]));
+}
+
+document.addEventListener("DOMContentLoaded", renderEntries);
+</script>
+</body>
+</html>
